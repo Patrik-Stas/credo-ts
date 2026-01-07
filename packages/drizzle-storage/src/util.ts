@@ -1,6 +1,13 @@
+import { fileURLToPath } from 'node:url'
+import { dirname as pathDirname } from 'node:path'
 import type { DrizzleRecordBundle } from './DrizzleRecord'
 
-export const dirname = import.meta.dirname
+// Make dirname work even when import.meta.dirname is not provided by the loader
+const __filename = fileURLToPath(import.meta.url)
+export const dirname =
+  typeof import.meta.dirname === 'string' && import.meta.dirname.length > 0
+    ? import.meta.dirname
+    : pathDirname(__filename)
 export const rootDirectory = `${dirname}/..`
 
 const addSchemaExtension = (path: string) => (dirname.endsWith('/src') ? `${path}.ts` : `${path}.mjs`)
